@@ -1,10 +1,8 @@
-import { useEffect, useState } from "react";
 import { Outlet, useParams, useMatch, useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import { Link } from "react-router-dom";
 import { useQuery } from "react-query";
 import { fetchCoinInfo, fetchCoinPrice } from "../api";
-import { isDarkAtom } from "../atoms/atoms";
 
 interface RouteParams {
   coinId: string;
@@ -69,17 +67,14 @@ const Coin = () => {
   const { coinId } = useParams() as unknown as RouteParams;
   const navigate = useNavigate();
 
-  const { data: infoData, isLoading: infoLoading } = useQuery<ICoinData>(
-    ["info", coinId],
-    () => fetchCoinInfo(coinId)
+  const { isLoading: infoLoading } = useQuery<ICoinData>(["info", coinId], () =>
+    fetchCoinInfo(coinId)
   );
-  const { data: priceData, isLoading: priceLoading } = useQuery<IPriceData>(
-    ["price", coinId],
-    () => fetchCoinPrice(coinId)
+  const { data: priceData } = useQuery<IPriceData>(["price", coinId], () =>
+    fetchCoinPrice(coinId)
   );
   const chartMatch = useMatch("/:id/chart");
   const priceMatch = useMatch("/:id/price");
-  const loading = infoLoading || priceLoading;
   // const [coinData, setCoinData] = useState<ICoinData>();
   // const [coinPrice, setCoinPrice] = useState<IPriceData>();
   // const [isLoading, setIsLoading] = useState(true);
