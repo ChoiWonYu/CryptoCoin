@@ -14,7 +14,6 @@ interface CoinInterface {
 }
 const Coins = () => {
   const { isLoading, data } = useQuery<CoinInterface[]>("allCoins", fetchCoins);
-  console.log(data, isLoading);
   const navigate = useNavigate();
   const handleClick = (id: string, name: string) => {
     navigate(`./${id}`, { state: { name } });

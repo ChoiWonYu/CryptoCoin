@@ -4,7 +4,8 @@ import { ReactQueryDevtools } from "react-query/devtools";
 import { ThemeProvider } from "styled-components";
 import { DarkTheme, LightTheme } from "./theme";
 import { isDarkAtom } from "./atoms/atoms";
-import { useRecoilValue } from "recoil";
+import { useRecoilState } from "recoil";
+import styled from "styled-components";
 
 const GlobalStyled = createGlobalStyle`
 @import url('https://fonts.googleapis.com/css2?family=Nanum+Myeongjo:wght@700&family=Source+Sans+Pro:wght@300&display=swap');  /* http://meyerweb.com/eric/tools/css/reset/ 
@@ -65,11 +66,17 @@ a{
 }
 `;
 function App() {
-  const isDark = useRecoilValue(isDarkAtom);
+  const [isDark, setIsDark] = useRecoilState(isDarkAtom);
+  const changeMode = () => {
+    setIsDark(!isDark);
+  };
   return (
     <>
       <ThemeProvider theme={isDark ? DarkTheme : LightTheme}>
         <GlobalStyled />
+        <DarkModeBtn onClick={changeMode}>
+          {isDark ? "LightMode" : "DarkMode"}
+        </DarkModeBtn>
         <Router />
         <ReactQueryDevtools initialIsOpen />
       </ThemeProvider>
@@ -78,3 +85,15 @@ function App() {
 }
 
 export default App;
+
+const DarkModeBtn = styled.button`
+  width: 100px;
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  border: none;
+  background-color: ${(props) => props.theme.bgColor};
+  &:hover {
+    color: ${(props) => props.theme.accentColor};
+  }
+`;

@@ -28,11 +28,16 @@ const Chart = () => {
         "Loading chart..."
       ) : (
         <ApexChart
-          type="line"
+          type="candlestick"
           series={[
             {
-              name: "sales",
-              data: data?.map((price) => price.close) as number[],
+              data: data?.map((price, index) => [
+                index,
+                price.open,
+                price.high,
+                price.low,
+                price.close,
+              ]) as number[][],
             },
           ]}
           options={{

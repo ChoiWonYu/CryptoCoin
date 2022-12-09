@@ -1,7 +1,8 @@
 import React from "react";
-
+import { useLoaderData, useLocation } from "react-router-dom";
 const Price = () => {
-  return <div>Price</div>;
+  const price = useLocation().state.price;
+  return <div>Price : {price}$</div>;
 };
 
 export default Price;

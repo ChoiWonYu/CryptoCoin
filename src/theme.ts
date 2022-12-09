@@ -7,7 +7,7 @@ export const DarkTheme: DefaultTheme = {
 };
 
 export const LightTheme: DefaultTheme = {
-  bgColor: "smokewhite",
+  bgColor: "smokeWhite",
   textColor: "black",
   accentColor: "#44bd32",
 };

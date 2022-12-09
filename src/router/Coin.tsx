@@ -1,10 +1,11 @@
 import { useEffect, useState } from "react";
-import { useLocation, Outlet, useParams, useMatch } from "react-router-dom";
-import { Axios } from "../lib/Axios";
+import { Outlet, useParams, useMatch, useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import { Link } from "react-router-dom";
 import { useQuery } from "react-query";
 import { fetchCoinInfo, fetchCoinPrice } from "../api";
+import { isDarkAtom } from "../atoms/atoms";
+
 interface RouteParams {
   coinId: string;
 }
@@ -66,6 +67,7 @@ interface IPriceData {
 }
 const Coin = () => {
   const { coinId } = useParams() as unknown as RouteParams;
+  const navigate = useNavigate();
 
   const { data: infoData, isLoading: infoLoading } = useQuery<ICoinData>(
     ["info", coinId],
@@ -98,6 +100,7 @@ const Coin = () => {
         <Header>Loading...</Header>
       ) : (
         <Container>
+          <GoHomeBtn onClick={() => navigate("/")}>Go Home</GoHomeBtn>
           <Header>
             <Title>Coin</Title>
           </Header>
@@ -106,7 +109,12 @@ const Coin = () => {
               <Link to={`/${coinId}/chart`}>Chart</Link>
             </Tab>
             <Tab isActive={priceMatch !== null}>
-              <Link to={`/${coinId}/price`}>Price</Link>
+              <Link
+                to={`/${coinId}/price`}
+                state={{ price: priceData?.quotes.USD.price }}
+              >
+                Price
+              </Link>
             </Tab>
           </Tabs>
           <Outlet context={{ coinId }} />
@@ -127,6 +135,7 @@ const Container = styled.div`
   flex-direction: column;
   justify-content: center;
   align-items: center;
+  background-color: ${(props) => props.theme.bgColor};
 `;
 
 const Header = styled.header`
@@ -134,6 +143,7 @@ const Header = styled.header`
   display: flex;
   justify-content: center;
   align-items: center;
+  width: 80%;
 `;
 
 const Tabs = styled.div`
@@ -152,5 +162,17 @@ const Tab = styled.div<{ isActive: boolean }>`
   a {
     display: block;
     color: inherit;
+  }
+`;
+
+const GoHomeBtn = styled.button`
+  width: 100px;
+  position: absolute;
+  top: 10px;
+  border: none;
+  background-color: ${(props) => props.theme.bgColor};
+  right: 110px;
+  &:hover {
+    color: ${(props) => props.theme.accentColor};
   }
 `;
